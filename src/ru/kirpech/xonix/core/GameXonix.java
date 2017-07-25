@@ -1,6 +1,5 @@
 package ru.kirpech.xonix.core;
 
-import com.sun.glass.ui.*;
 import ru.kirpech.xonix.object.Balls;
 import ru.kirpech.xonix.object.Cube;
 import ru.kirpech.xonix.object.Field;
@@ -8,49 +7,41 @@ import ru.kirpech.xonix.object.Xonix;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Random;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 
 public class GameXonix {
 
     public static final int POINT_SIZE = 10;
     static final public int FIELD_WIDTH = 640 / POINT_SIZE;
     static final public int FIELD_HEIGHT = 460 / POINT_SIZE;
-    static final int FIELD_DX = 6;
-    private static final int FIELD_DY = 28 + 28;
-    private static final int START_LOCATION = 200;
     static final public int LEFT = 37; // key codes
     static final public int UP = 38;
     static final public int RIGHT = 39;
     static final public int DOWN = 40;
-    private static final int SHOW_DELAY = 60; // delay for animation
     static final public int COLOR_TEMP = 1; // for temporary filling
     static final public int COLOR_WATER = 0;
     static final public int COLOR_LAND = 0x00a8a8;
     static final public int COLOR_TRACK = 0x901290;
+    static final int FIELD_DX = 6;
+    private static final int FIELD_DY = 28 + 28;
+    private static final int START_LOCATION = 200;
+    private static final int SHOW_DELAY = 60; // delay for animation
     private static final int PERCENT_OF_WATER_CAPTURE = 75;
     private static final String FORMAT_STRING = "Score: %d %20s %d %20s %2.0f%%";
     private static final Font font = new Font("", Font.BOLD, 21);
+    public static Field field = new Field();
     public Random random = new Random();
     private JLabel board = new JLabel();
     private Delay delay = new Delay();
-    public static Field field = new Field();
     private Xonix xonix = new Xonix();
     private Balls balls = new Balls(random);
     private Cube cube = new Cube();
     private GameOver gameover = new GameOver();
     private boolean gameRunning = false;
-    private boolean newGame= true;
+    private boolean newGame = true;
     private Canvas canvas = new Canvas();
-
-    public static void main(String[] args) {
-        new GameXonix().go();
-    }
 
     private GameXonix() {
         // Инициализируем свойства окна
@@ -73,9 +64,8 @@ public class GameXonix {
         menuBar.add(restartMenuItem);
         final JMenuItem stopMenuItem = new JMenuItem("Stop");
         menuBar.add(stopMenuItem);
-        frame.setBounds(START_LOCATION, START_LOCATION, FIELD_WIDTH*POINT_SIZE + FIELD_DX,
-                (FIELD_HEIGHT+menuBar.getHeight())*POINT_SIZE + FIELD_DY);
-
+        frame.setBounds(START_LOCATION, START_LOCATION, FIELD_WIDTH * POINT_SIZE + FIELD_DX,
+                (FIELD_HEIGHT + menuBar.getHeight()) * POINT_SIZE + FIELD_DY);
 
 
         board.setFont(font);
@@ -93,18 +83,18 @@ public class GameXonix {
         });
         // Подписываемся на клики по меню
         startMenuItem.addActionListener(e -> {
-            gameRunning=true;
+            gameRunning = true;
             startMenuItem.setEnabled(false);
             pauseMenuItem.setEnabled(true);
         });
         pauseMenuItem.addActionListener(e -> {
-            gameRunning=false;
+            gameRunning = false;
             startMenuItem.setEnabled(true);
             pauseMenuItem.setEnabled(false);
         });
         restartMenuItem.addActionListener(e -> {
-            gameRunning=false;
-            gameover.gameLosed=false;
+            gameRunning = false;
+            gameover.gameLosed = false;
             canvas.repaint();
             startMenuItem.setEnabled(true);
             pauseMenuItem.setEnabled(false);
@@ -116,32 +106,38 @@ public class GameXonix {
             delay.wait(SHOW_DELAY * 10);
         });
         stopMenuItem.addActionListener(e -> {
-            gameRunning=false;
-            gameover.gameOver=true;
-            newGame=false;
+            gameRunning = false;
+            gameover.gameOver = true;
+            newGame = false;
             startMenuItem.setEnabled(true);
             pauseMenuItem.setEnabled(false);
         });
     }
 
+    public static void main(String[] args) {
+        new GameXonix().go();
+    }
+
     private void go() { // main loop of game
-        while (!gameover.isGameOver()/*||newGame*/){
+        while (!gameover.isGameOver()/*||newGame*/) {
             canvas.repaint();
-            if(gameRunning){
+            if (gameRunning) {
                 xonix.move(balls);
                 balls.move();
                 cube.move();
                 board.setText(String.format(FORMAT_STRING, field.getCountScore(), "Xn:", xonix.getCountLives(),
                         "Full:", field.getCurrentPercent()));
                 delay.wait(SHOW_DELAY);
-                if (xonix.isSelfCrosed() || balls.isHitTrackOrXonix(field,xonix) || cube.isHitXonix(xonix)) {
+                if (xonix.isSelfCrosed() || balls.isHitTrackOrXonix(field, xonix) || cube.isHitXonix(xonix)) {
                     xonix.decreaseCountLives();
                     if (xonix.getCountLives() > 0) {
                         xonix.init();
                         field.clearTrack();
                         delay.wait(SHOW_DELAY * 10);
+                    } else {
+                        gameRunning = false;
+                        gameover.gameLosed = true;
                     }
-                    else {gameRunning=false;gameover.gameLosed=true;}
                 }
                 if (field.getCurrentPercent() >= PERCENT_OF_WATER_CAPTURE) {
                     field.init();
@@ -160,9 +156,12 @@ public class GameXonix {
         void wait(int milliseconds) {
             try {
                 Thread.sleep(milliseconds);
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
     class Canvas extends JPanel { // my canvas for painting
         @Override
         public void paint(Graphics g) {

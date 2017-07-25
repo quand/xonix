@@ -1,10 +1,6 @@
 package ru.kirpech.xonix.core;
 
-import ru.kirpech.xonix.object.Field;
-
 import javax.swing.*;
-
-import static ru.kirpech.xonix.core.GameXonix.*;
 
 
 public abstract class Object extends JPanel {
@@ -19,7 +15,12 @@ public abstract class Object extends JPanel {
 
     protected abstract void updateDXandDY();
 
-    public int getX() { return x; }
-    public int getY() { return y; }
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 
 }

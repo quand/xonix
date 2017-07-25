@@ -7,8 +7,8 @@ import static ru.kirpech.xonix.core.GameXonix.*;
 
 public abstract class Player extends Object {
     protected boolean isWater;
-    private boolean isSelfCross;
     int direction, countLives = 3;
+    private boolean isSelfCross;
 
     public void move(Balls balls) {
         if (direction == LEFT) x--;
@@ -30,5 +30,8 @@ public abstract class Player extends Object {
             GameXonix.field.setColor(x, y, COLOR_TRACK);
         }
     }
-    public boolean isSelfCrosed() { return isSelfCross; }
+
+    public boolean isSelfCrosed() {
+        return isSelfCross;
+    }
 }

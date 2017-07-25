@@ -5,7 +5,7 @@ import java.awt.*;
 import static ru.kirpech.xonix.core.GameXonix.*;
 
 public class Field {
-    private final int WATER_AREA = (FIELD_WIDTH - 4)*(FIELD_HEIGHT - 4);
+    private final int WATER_AREA = (FIELD_WIDTH - 4) * (FIELD_HEIGHT - 4);
     private int[][] field = new int[FIELD_WIDTH][FIELD_HEIGHT];
     private float currentWaterArea;
     private int countScore = 0;
@@ -17,7 +17,7 @@ public class Field {
     public void init() {
         for (int y = 0; y < FIELD_HEIGHT; y++)
             for (int x = 0; x < FIELD_WIDTH; x++)
-                field[x][y] = (x < 2 || x > FIELD_WIDTH - 3 || y < 2 || y > FIELD_HEIGHT - 3)? COLOR_LAND : COLOR_WATER;
+                field[x][y] = (x < 2 || x > FIELD_WIDTH - 3 || y < 2 || y > FIELD_HEIGHT - 3) ? COLOR_LAND : COLOR_WATER;
         currentWaterArea = WATER_AREA;
     }
 
@@ -26,10 +26,17 @@ public class Field {
         return field[x][y];
     }
 
-    void setColor(int x, int y, int color) { field[x][y] = color; }
+    void setColor(int x, int y, int color) {
+        field[x][y] = color;
+    }
 
-    public int getCountScore() { return countScore; }
-    public float getCurrentPercent() { return 100f - currentWaterArea / WATER_AREA * 100; }
+    public int getCountScore() {
+        return countScore;
+    }
+
+    public float getCurrentPercent() {
+        return 100f - currentWaterArea / WATER_AREA * 100;
+    }
 
     public void clearTrack() { // clear track of Xonix
         for (int y = 0; y < FIELD_HEIGHT; y++)
@@ -64,7 +71,7 @@ public class Field {
         for (int y = 0; y < FIELD_HEIGHT; y++)
             for (int x = 0; x < FIELD_WIDTH; x++) {
                 g.setColor(new Color(field[x][y]));
-                g.fillRect(x*POINT_SIZE, y*POINT_SIZE, POINT_SIZE, POINT_SIZE);
+                g.fillRect(x * POINT_SIZE, y * POINT_SIZE, POINT_SIZE, POINT_SIZE);
             }
     }
 }

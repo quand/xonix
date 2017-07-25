@@ -1,14 +1,18 @@
 package ru.kirpech.xonix.core;
 
 import java.awt.*;
-import ru.kirpech.xonix.core.*;
 
 public class GameOver {
     private final String GAME_OVER_MSG = "GAME OVER";
-    protected boolean gameOver,gameLosed=false;
+    protected boolean gameOver, gameLosed = false;
 
-    boolean isGameOver() { return gameOver; }
-    boolean isGameLosed() { return gameLosed; }
+    boolean isGameOver() {
+        return gameOver;
+    }
+
+    boolean isGameLosed() {
+        return gameLosed;
+    }
 
     void paint(Graphics g) {
         if (isGameLosed()) {
